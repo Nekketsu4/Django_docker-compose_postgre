@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-bir29k2)$f=zd$7x$t-@7)(e^ueshm(ad*&jd91tbius+5%!@^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -90,13 +90,16 @@ with open('pass.txt', 'r', encoding='utf-8') as f:
 #     }
 # }
 
+'''Создай образ бд и затем уже контейнер на его основе
+ чтобы соединить его с проектом'''
+
 DATABASES = {
     'default': {
     'ENGINE': 'django.db.backends.postgresql',
-    'NAME': 'new_db',
-    'USER': 'postgres',
-    'PASSWORD': MY_PASS,
-    'HOST': 'store_db',
+    'NAME': os.environ.get('POSTGRES_NAME'),
+    'USER': os.environ.get('POSTGRES_USER'),
+    'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+    'HOST': 'db',
     'PORT': '5432'
     }
 }

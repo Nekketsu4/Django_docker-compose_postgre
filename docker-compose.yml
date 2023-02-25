@@ -1,18 +1,32 @@
-version: '3.7'
+version: '3.9'
 
 services:
-  store_db:
-    image: postgres:10.1-alpine
+  db:
+    image: postgres
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
-  my_proj:
+      - ./data/db:/usr/src/postgresql/data
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+  web:
     build: .
     command: python /usr/src/store/manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/usr/src/store
     ports:
-      - 8000:8000
+      - "8000:8000"
+    environment:
+      - POSTGRES_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
     depends_on:
-      - store_db
-volumes:
-  postgres_data:
+      - db
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: Vines05@mail.ru
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports:
+      - "5050:80"
